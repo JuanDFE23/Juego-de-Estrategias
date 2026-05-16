@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Juego_de_Estrategias
 {
-    internal class Pieza
+    internal abstract class Pieza
     {
         public Jugador Color { get; set; }
         public TipoPieza Tipo { get; set; }

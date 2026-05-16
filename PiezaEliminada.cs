@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Juego_de_Estrategias
 {
-    internal class PiezaEliminada
+    internal static class JuegoUtilidades
     {
-        private void CapturarPieza(Pieza piezaCapturada)
+        public static void CapturarPieza(Pieza piezaCapturada)
         {
             // Si capturan al Rey, el juego termina
             if (piezaCapturada.Tipo == TipoPieza.Rey)
@@ -18,7 +18,7 @@ namespace Juego_de_Estrategias
             Console.WriteLine($"Pieza {piezaCapturada.Tipo} de color {piezaCapturada.Color} capturada.");
         }
 
-        private void FinalizarJuego(Jugador colorPerdedor)
+        public static void FinalizarJuego(Jugador colorPerdedor)
         {
             string ganador = (colorPerdedor == Jugador.Blanco) ? "Negras" : "Blancas";
             MessageBox.Show($"¡Jaque Mate! El ganador es el jugador de las {ganador}");

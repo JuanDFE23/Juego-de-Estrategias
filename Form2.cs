@@ -21,6 +21,7 @@ namespace Juego_de_Estrategias
 
         private void FormJuego_Load(object sender, EventArgs e)
         {
+            InicializarPiezas();
             CrearTablero();
         }
 
@@ -68,7 +69,7 @@ namespace Juego_de_Estrategias
         Pieza[,] tableroLogico = new Pieza[8, 8];
 
         // Ejemplo de cómo inicializar tus piezas:
-        void InicializarPiezas()
+        public void InicializarPiezas()
         {
             // Blancas (en la fila 7)
             tableroLogico[7, 4] = new Rey(Jugador.Blanco, 7, 4);
@@ -78,6 +79,19 @@ namespace Juego_de_Estrategias
             // 4 Soldados blancos (en la fila 6)
             for (int i = 2; i < 6; i++)
                 tableroLogico[6, i] = new Soldado(Jugador.Blanco, 6, i);
+        }
+
+        // Método público para preparar un escenario de pruebas con piezas contrarias
+        public void PrepararEscenarioPruebas()
+        {
+            // Inicializa las piezas blancas
+            InicializarPiezas();
+
+            // Colocar algunas piezas negras para pruebas de captura
+            // Colocamos una torre negra frente a un soldado blanco para verificar captura
+            tableroLogico[5, 3] = new Torre(Jugador.Negro, 5, 3);
+            // Colocamos un rey negro para comprobar detección de fin de juego
+            tableroLogico[0, 0] = new Rey(Jugador.Negro, 0, 0);
         }
 
         public bool IntentarMover(int filaOrigen, int colOrigen, int filaDestino, int colDestino)
@@ -99,7 +113,7 @@ namespace Juego_de_Estrategias
                     return false;
 
                 // Si es color opuesto, la capturamos
-                CapturarPieza(piezaObjetivo);
+                JuegoUtilidades.CapturarPieza(piezaObjetivo);
             }
 
             // 4. Ejecutar el movimiento en la matriz
@@ -117,6 +131,9 @@ namespace Juego_de_Estrategias
         {
             // 1. Resetear el gestor de turnos
             gestor = new GestorTurnos();
+
+            // Volver a suscribir el evento para actualizar la interfaz
+            gestor.AlCambiarTurno += ActualizarInterfazTurno;
 
             // 2. Limpiar la matriz lógica (borrar piezas anteriores)
             Array.Clear(tableroLogico, 0, tableroLogico.Length);

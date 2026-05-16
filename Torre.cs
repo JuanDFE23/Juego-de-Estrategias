@@ -5,7 +5,7 @@ using static System.Net.WebRequestMethods;
 
 namespace Juego_de_Estrategias
 {
-    internal class Torre
+    internal class Torre : Pieza
     {
         public Torre(Jugador color, int f, int c) : base(color, f, c) { Tipo = TipoPieza.Torre; }
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Juego_de_Estrategias
 {
-    internal class Rey
+    internal class Rey : Pieza
     {
         public Rey(Jugador color, int f, int c) : base(color, f, c) { Tipo = TipoPieza.Rey; }
 

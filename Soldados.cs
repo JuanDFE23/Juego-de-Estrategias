@@ -5,7 +5,7 @@ using static System.Net.WebRequestMethods;
 
 namespace Juego_de_Estrategias
 {
-    internal class Soldados
+    internal class Soldado : Pieza
     {
         public Soldado(Jugador color, int f, int c) : base(color, f, c) { Tipo = TipoPieza.Soldado; }
 
