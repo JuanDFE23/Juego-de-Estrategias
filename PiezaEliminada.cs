@@ -22,7 +22,17 @@ namespace Juego_de_Estrategias
         {
             string ganador = (colorPerdedor == Jugador.Blanco) ? "Negras" : "Blancas";
             MessageBox.Show($"¡Jaque Mate! El ganador es el jugador de las {ganador}");
-            // Aquí podrías reiniciar el juego o volver al Login
+
+            // Intentar encontrar una instancia abierta de FormJuego y reiniciarla
+            foreach (Form frm in Application.OpenForms)
+            {
+                if (frm is FormJuego juego)
+                {
+                    // Reiniciamos posición y UI
+                    juego.ReiniciarJuego();
+                    break;
+                }
+            }
         }
     }
 }

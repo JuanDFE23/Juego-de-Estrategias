@@ -10,35 +10,44 @@ namespace Juego_de_Estrategias
 {
     public partial class FormJuego : Form
     {
-        // Variables para recordar la selección del usuario
+        // 1. MATRICES A NIVEL DE CLASE (Para que todos los métodos puedan verlas)
+        private Pieza[,] tableroLogico = new Pieza[8, 8];
+        private Panel[,] panelesTablero = new Panel[8, 8];
+
+        // 2. Variables para recordar la selección del usuario
         private bool hayPiezaSeleccionada = false;
         private int filaSeleccionada = -1;
         private int columnaSeleccionada = -1;
-        private Color colorOriginalPanel; // Para restaurar el color del tablero tras mover
+        private Color colorOriginalPanel;
+
+        // 3. Tu gestor de turnos
+        private GestorTurnos gestor;
+        // Cache de imágenes generadas para las piezas
+        private Dictionary<string, Image> imagenesPiezas;
 
         public FormJuego()
         {
             InitializeComponent();
             gestor = new GestorTurnos();
-
-            // Suscribirse al evento para actualizar un Label o título en la interfaz
             gestor.AlCambiarTurno += ActualizarInterfazTurno;
         }
 
         private void FormJuego_Load(object sender, EventArgs e)
         {
+            // OJO: Aquí ya no declaramos las matrices, solo llamamos a los métodos
             InicializarPiezas();
             CrearTablero();
+            // Generar imágenes para las piezas (placeholders estilizadas)
+            CrearRecursosPiezas();
             ActualizarTableroVisual();
-        // Matriz de 8x8 que guarda objetos de tipo Pieza
-        Pieza[,] tableroLogico = new Pieza[8, 8];
-
-            // NUEVO: Matriz para guardar los paneles y modificarlos fácilmente
-            Panel[,] panelesTablero = new Panel[8, 8];
         }
 
         private void CrearTablero()
         {
+            // Asegurarnos de empezar desde cero en la interfaz antes de crear paneles
+            this.Controls.Clear();
+            panelesTablero = new Panel[8, 8];
+
             int tamañoCasilla = 60;
 
             for (int fila = 0; fila < 8; fila++)
@@ -75,7 +84,7 @@ namespace Juego_de_Estrategias
             }
         }
 
-        private GestorTurnos gestor; // Instancia de nuestra clase
+        // instancia de gestor ya declarada arriba
 
         private void ActualizarInterfazTurno(Jugador nuevoTurno)
         {
@@ -88,26 +97,37 @@ namespace Juego_de_Estrategias
             gestor.CambiarTurno();
         }
 
-        // Matriz de 8x8 que guarda objetos de tipo Pieza
-        Pieza[,] tableroLogico = new Pieza[8, 8];
+        // Matriz de 8x8 que guarda objetos de tipo Pieza (declarada a nivel de clase arriba)
 
         // Ejemplo de cómo inicializar tus piezas:
         public void InicializarPiezas()
         {
+            // Limpiar cualquier estado previo
+            Array.Clear(tableroLogico, 0, tableroLogico.Length);
+
             // Blancas (en la fila 7)
             tableroLogico[7, 4] = new Rey(Jugador.Blanco, 7, 4);
-            tableroLogico[7, 0] = new Torre(Jugador.Blanco, 7, 0);
-            tableroLogico[7, 7] = new Torre(Jugador.Blanco, 7, 7);
+            tableroLogico[7, 2] = new Torre(Jugador.Blanco, 7, 2);
+            tableroLogico[7, 5] = new Torre(Jugador.Blanco, 7, 5);
 
             // 4 Soldados blancos (en la fila 6)
             for (int i = 2; i < 6; i++)
                 tableroLogico[6, i] = new Soldado(Jugador.Blanco, 6, i);
+
+            // Negras (posición espejo: filas 0 y 1)
+            tableroLogico[0, 4] = new Rey(Jugador.Negro, 0, 4);
+            tableroLogico[0, 2] = new Torre(Jugador.Negro, 0, 2);
+            tableroLogico[0, 5] = new Torre(Jugador.Negro, 0, 5);
+            // Soldados negros en la fila 1
+            for (int i = 2; i < 6; i++)
+                tableroLogico[1, i] = new Soldado(Jugador.Negro, 1, i);
         }
 
         // Método público para preparar un escenario de pruebas con piezas contrarias
         public void PrepararEscenarioPruebas()
         {
-            // Inicializa las piezas blancas
+            // Inicializa las piezas blancas (limpia primero)
+            Array.Clear(tableroLogico, 0, tableroLogico.Length);
             InicializarPiezas();
 
             // Colocar algunas piezas negras para pruebas de captura
@@ -151,7 +171,7 @@ namespace Juego_de_Estrategias
             return true;
         }
 
-        private void ReiniciarJuego()
+        public void ReiniciarJuego()
         {
             // 1. Resetear el gestor de turnos
             gestor = new GestorTurnos();
@@ -200,27 +220,69 @@ namespace Juego_de_Estrategias
         // Este método traduce tus objetos lógicos a imágenes de los recursos
         private Image ObtenerImagenPieza(Pieza p)
         {
-            // Asegúrate de haber agregado tus imágenes PNG a Properties.Resources 
-            // y cambiar los nombres según corresponda
+            if (p == null) return null;
 
-            if (p is Rey)
-                return p.Color == Jugador.Blanco ? Properties.Resources.ReyBlanco : Properties.Resources.ReyNegro;
+            string clave = null;
+            if (p is Rey) clave = $"Rey_{p.Color}";
+            else if (p is Torre) clave = $"Torre_{p.Color}";
+            else if (p is Soldado) clave = $"Soldado_{p.Color}";
 
-            if (p is Torre)
-                return p.Color == Jugador.Blanco ? Properties.Resources.TorreBlanca : Properties.Resources.TorreNegra;
-
-            if (p is Soldado) // Noté que usas 'Soldado' en lugar de Peón
-                return p.Color == Jugador.Blanco ? Properties.Resources.SoldadoBlanco : Properties.Resources.SoldadoNegro;
-
-            // Agrega aquí las validaciones para Alfil, Caballo, etc. cuando las crees.
+            if (clave != null && imagenesPiezas != null && imagenesPiezas.ContainsKey(clave))
+                return imagenesPiezas[clave];
 
             return null;
+        }
+
+        // Genera imágenes simples para cada tipo/color de pieza y las guarda en imagenesPiezas
+        private void CrearRecursosPiezas()
+        {
+            imagenesPiezas = new Dictionary<string, Image>();
+            int size = 48;
+
+            void Agregar(string nombre, Color fondo, string letra, Color letraColor)
+            {
+                Bitmap bmp = new Bitmap(size, size);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                    g.Clear(Color.Transparent);
+                    using (Brush b = new SolidBrush(fondo))
+                    {
+                        g.FillEllipse(b, 2, 2, size - 4, size - 4);
+                    }
+                    using (Font f = new Font("Segoe UI", 18, FontStyle.Bold, GraphicsUnit.Pixel))
+                    using (Brush br = new SolidBrush(letraColor))
+                    {
+                        SizeF textSize = g.MeasureString(letra, f);
+                        g.DrawString(letra, f, br, (size - textSize.Width) / 2, (size - textSize.Height) / 2 - 2);
+                    }
+                    // borde
+                    using (Pen pen = new Pen(Color.FromArgb(160, Color.Black), 1))
+                    {
+                        g.DrawEllipse(pen, 2, 2, size - 4, size - 4);
+                    }
+                }
+                imagenesPiezas[nombre] = bmp;
+            }
+
+            // Blancas: fondo claro, letra negra
+            Agregar("Rey_Blanco", Color.Beige, "R", Color.Black);
+            Agregar("Torre_Blanco", Color.Beige, "T", Color.Black);
+            Agregar("Soldado_Blanco", Color.Beige, "S", Color.Black);
+
+            // Negras: fondo oscuro, letra blanca
+            Agregar("Rey_Negro", Color.DimGray, "R", Color.White);
+            Agregar("Torre_Negro", Color.DimGray, "T", Color.White);
+            Agregar("Soldado_Negro", Color.DimGray, "S", Color.White);
         }
 
         private void Casilla_Click(object sender, EventArgs e)
         {
             // 1. Averiguar qué panel se clickeó y sus coordenadas
             Panel panelClickeado = sender as Panel;
+            if (panelClickeado == null) return;
+            if (panelClickeado.Tag == null) return;
+
             Point coordenadas = (Point)panelClickeado.Tag;
 
             int colClic = coordenadas.X;
@@ -232,6 +294,13 @@ namespace Juego_de_Estrategias
                 // Verificar que haya una pieza en la casilla que tocó
                 if (tableroLogico[filaClic, colClic] != null)
                 {
+                    // Solo permitir seleccionar si es el turno del color de esa pieza
+                    var pieza = tableroLogico[filaClic, colClic];
+                    if (!pieza.EsTurnoDe(gestor))
+                    {
+                        MessageBox.Show("No es el turno de ese jugador.", "Turno", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        return;
+                    }
                     hayPiezaSeleccionada = true;
                     filaSeleccionada = filaClic;
                     columnaSeleccionada = colClic;
@@ -269,14 +338,14 @@ namespace Juego_de_Estrategias
                 DeseleccionarPieza();
             }
         }
-
         private void DeseleccionarPieza()
         {
             if (hayPiezaSeleccionada)
             {
                 // Le devolvemos su color original al panel que estaba verde
                 Panel panelAnterior = panelesTablero[filaSeleccionada, columnaSeleccionada];
-                panelAnterior.BackColor = colorOriginalPanel;
+                if (panelAnterior != null)
+                    panelAnterior.BackColor = colorOriginalPanel;
 
                 // Reseteamos las variables
                 hayPiezaSeleccionada = false;
