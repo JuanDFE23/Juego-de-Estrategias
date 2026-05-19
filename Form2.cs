@@ -14,6 +14,9 @@ namespace Juego_de_Estrategias
         private Pieza[,] tableroLogico = new Pieza[8, 8];
         private Panel[,] panelesTablero = new Panel[8, 8];
 
+        // Tamaño en píxeles de cada casilla del tablero (8x8)
+        private const int tamañoCasilla = 60;
+
         // 2. Variables para recordar la selección del usuario
         private bool hayPiezaSeleccionada = false;
         private int filaSeleccionada = -1;
@@ -34,7 +37,13 @@ namespace Juego_de_Estrategias
 
         private void FormJuego_Load(object sender, EventArgs e)
         {
-            // OJO: Aquí ya no declaramos las matrices, solo llamamos a los métodos
+            // Ajustar el tamaño del cliente del formulario para que quepa el tablero completo
+            this.ClientSize = new Size(tamañoCasilla * 8, tamañoCasilla * 8);
+            // Opcional: evitar redimensionado que pueda romper el layout
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+
+            // Inicializar y crear tablero
             InicializarPiezas();
             CrearTablero();
             // Generar imágenes para las piezas (placeholders estilizadas)
@@ -48,7 +57,7 @@ namespace Juego_de_Estrategias
             this.Controls.Clear();
             panelesTablero = new Panel[8, 8];
 
-            int tamañoCasilla = 60;
+            // Usar la constante de clase tamañoCasilla
 
             for (int fila = 0; fila < 8; fila++)
             {
