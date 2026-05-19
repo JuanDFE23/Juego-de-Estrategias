@@ -11,9 +11,23 @@ namespace Juego_de_Estrategias
 
         public override bool EsMovimientoValido(int nFila, int nCol, Pieza[,] tablero)
         {
-            // Lógica simplificada: mueve 1 hacia adelante
             int direccion = (Color == Jugador.Blanco) ? -1 : 1;
-            return (nCol == Columna && nFila == Fila + direccion);
+
+            // Movimiento hacia adelante una casilla (debe estar vacía)
+            if (nCol == Columna && nFila == Fila + direccion)
+            {
+                return tablero[nFila, nCol] == null;
+            }
+
+            // Captura en diagonal hacia adelante (una casilla diagonaly) solo si hay pieza enemiga
+            if (Math.Abs(nCol - Columna) == 1 && nFila == Fila + direccion)
+            {
+                Pieza objetivo = tablero[nFila, nCol];
+                if (objetivo != null && objetivo.Color != this.Color)
+                    return true;
+            }
+
+            return false;
         }
     }
 }

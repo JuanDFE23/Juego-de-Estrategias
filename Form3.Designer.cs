@@ -34,6 +34,7 @@
 			button2 = new Button();
 			button3 = new Button();
 			button4 = new Button();
+			button5 = new Button();
 			SuspendLayout();
 			// 
 			// textBox1
@@ -93,11 +94,22 @@
 			button4.UseVisualStyleBackColor = true;
 			button4.Click += button4_Click;
 			// 
+			// button5
+			// 
+			button5.Location = new Point(24, 320);
+			button5.Name = "button5";
+			button5.Size = new Size(200, 40);
+			button5.TabIndex = 6;
+			button5.Text = "Reiniciar puntajes";
+			button5.UseVisualStyleBackColor = true;
+			button5.Click += button5_Click;
+			// 
 			// Form3
 			// 
 			AutoScaleDimensions = new SizeF(8F, 20F);
 			AutoScaleMode = AutoScaleMode.Font;
 			ClientSize = new Size(671, 528);
+			Controls.Add(button5);
 			Controls.Add(button4);
 			Controls.Add(button3);
 			Controls.Add(button2);
@@ -119,5 +131,6 @@
 		private Button button2;
 		private Button button3;
 		private Button button4;
+		private Button button5;
 	}
 }

@@ -58,6 +58,9 @@
             txtContraseña.Name = "txtContraseña";
             txtContraseña.Size = new Size(200, 39);
             txtContraseña.TabIndex = 2;
+            // Mostrar los caracteres de la contraseña como asteriscos
+            txtContraseña.PasswordChar = '*';
+            txtContraseña.UseSystemPasswordChar = false;
             // 
             // label2
             // 

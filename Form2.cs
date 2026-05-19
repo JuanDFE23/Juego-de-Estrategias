@@ -37,6 +37,8 @@ namespace Juego_de_Estrategias
 
         private void FormJuego_Load(object sender, EventArgs e)
         {
+            // Iniciar el contador de puntuación para la nueva partida
+            ScoreManager.StartNewGame();
             // Ajustar el tamaño del cliente del formulario para que quepa el tablero completo
             this.ClientSize = new Size(tamañoCasilla * 8, tamañoCasilla * 8);
             // Opcional: evitar redimensionado que pueda romper el layout
@@ -203,6 +205,9 @@ namespace Juego_de_Estrategias
             ActualizarTableroVisual();
 
             MessageBox.Show("El juego ha sido reiniciado. Turno de Blancas.");
+
+            // Reiniciar contador de puntuación para la nueva partida
+            ScoreManager.StartNewGame();
         }
 
         // Este método actualiza toda la parte gráfica basándose en la lógica

@@ -22,12 +22,12 @@ namespace Juego_de_Estrategias
 
 		private void textBox1_TextChanged(object sender, EventArgs e)
 		{
-			// textbox1 es solo visual en este menú
+
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			// Iniciar Partida: abrir FormJuego
+			// Iniciar partida: abrir la ventana del juego y ocultar el menú
 			FormJuego juego = new FormJuego();
 			juego.Show();
 			this.Hide();
@@ -35,7 +35,7 @@ namespace Juego_de_Estrategias
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			string reglas = "Reglas básicas:\n- Mueve según la pieza.\n- Capturar el Rey provoca jaque mate.\n- Turnos alternos.";
+			string reglas = "Reglas básicas:\n- Torre: se mueve en líneas rectas sin saltar piezas.\n- Rey: se mueve 1 casilla en cualquier dirección.\n- Soldado: avanza 1 casilla hacia adelante y captura en diagonales delanteras.\n- Capturar el rey finaliza la partida.";
 			MessageBox.Show(reglas, "Reglas del juego", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
@@ -44,22 +44,33 @@ namespace Juego_de_Estrategias
 			var top = ScoreManager.GetLeaderboard();
 			if (top == null || top.Count == 0)
 			{
-				MessageBox.Show("No hay puntajes aún.", "Puntaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				MessageBox.Show("Aún no hay puntajes registrados", "Leaderboard", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 			StringBuilder sb = new StringBuilder();
-			int rank = 1;
+			int place = 1;
 			foreach (var r in top)
 			{
-				sb.AppendLine($"{rank}. {r.Jugador} - {r.Victorias} victorias");
-				rank++;
+				sb.AppendLine($"{place}. {r.Jugador}: {r.Puntos} pts");
+				place++;
 			}
 			MessageBox.Show(sb.ToString(), "Puntaje más alto", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		private void button4_Click(object sender, EventArgs e)
 		{
+			// Salir
 			Application.Exit();
+		}
+
+		private void button5_Click(object sender, EventArgs e)
+		{
+			var res = MessageBox.Show("¿Seguro que deseas reiniciar todos los puntajes guardados?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+			if (res == DialogResult.Yes)
+			{
+				ScoreManager.ResetLeaderboard();
+				MessageBox.Show("Puntajes reiniciados.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+			}
 		}
 	}
 }
