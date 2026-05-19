@@ -38,12 +38,12 @@
 			// 
 			// textBox1
 			// 
-			textBox1.Location = new Point(536, 143);
+			textBox1.Location = new Point(24, 24);
 			textBox1.Name = "textBox1";
-			textBox1.Size = new Size(125, 27);
+			textBox1.Size = new Size(200, 32);
 			textBox1.TabIndex = 0;
-			textBox1.Text = "salir";
-			textBox1.TextChanged += textBox1_TextChanged;
+			textBox1.Text = "Menu";
+			textBox1.ReadOnly = true;
 			// 
 			// textBox2
 			// 
@@ -55,38 +55,43 @@
 			// 
 			// button1
 			// 
-			button1.Location = new Point(173, 130);
+			button1.Location = new Point(24, 80);
 			button1.Name = "button1";
-			button1.Size = new Size(94, 29);
+			button1.Size = new Size(200, 40);
 			button1.TabIndex = 2;
-			button1.Text = "button1";
+			button1.Text = "Iniciar Partida";
 			button1.UseVisualStyleBackColor = true;
+			button1.Click += button1_Click;
 			// 
 			// button2
 			// 
-			button2.Location = new Point(173, 223);
+			button2.Location = new Point(24, 140);
 			button2.Name = "button2";
-			button2.Size = new Size(94, 29);
+			button2.Size = new Size(200, 40);
 			button2.TabIndex = 3;
-			button2.Text = "Reglas";
+			button2.Text = "Ver reglas del juego";
 			button2.UseVisualStyleBackColor = true;
+			button2.Click += button2_Click;
 			// 
 			// button3
 			// 
-			button3.Location = new Point(173, 313);
+			button3.Location = new Point(24, 200);
 			button3.Name = "button3";
-			button3.Size = new Size(94, 29);
+			button3.Size = new Size(200, 40);
 			button3.TabIndex = 4;
+			button3.Text = "Ver puntaje más alto";
 			button3.UseVisualStyleBackColor = true;
+			button3.Click += button3_Click;
 			// 
 			// button4
 			// 
-			button4.Location = new Point(173, 404);
+			button4.Location = new Point(24, 260);
 			button4.Name = "button4";
-			button4.Size = new Size(94, 29);
+			button4.Size = new Size(200, 40);
 			button4.TabIndex = 5;
-			button4.Text = "button4";
+			button4.Text = "Salir";
 			button4.UseVisualStyleBackColor = true;
+			button4.Click += button4_Click;
 			// 
 			// Form3
 			// 

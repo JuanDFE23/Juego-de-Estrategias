@@ -25,8 +25,8 @@ namespace Juego_de_Estrategias
             if (txtUsuario.Text == usuarioCorrecto && txtContraseña.Text == contraseñaCorrecta)
             {
                 MessageBox.Show("!Bienvenido al juego!");
-                FormJuego partida = new FormJuego();
-                partida.Show();
+                Form3 menu = new Form3();
+                menu.Show();
                 this.Hide();
             }
             else

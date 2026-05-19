@@ -148,15 +148,12 @@ namespace Juego_de_Estrategias
             // 2. Validar que el movimiento sea legal para esa pieza
             if (!piezaAtacante.EsMovimientoValido(filaDestino, colDestino, tableroLogico)) return false;
 
-            // 3. Lógica de captura
+            // 3. Lógica de captura: validación previa
             if (piezaObjetivo != null)
             {
                 // Si es del mismo color, no se puede mover ahí
                 if (piezaObjetivo.Color == piezaAtacante.Color)
                     return false;
-
-                // Si es color opuesto, la capturamos
-                JuegoUtilidades.CapturarPieza(piezaObjetivo);
             }
 
             // 4. Ejecutar el movimiento en la matriz
@@ -166,6 +163,12 @@ namespace Juego_de_Estrategias
             // Actualizar coordenadas internas de la pieza
             piezaAtacante.Fila = filaDestino;
             piezaAtacante.Columna = colDestino;
+
+            // Si hubo captura, procesarla ahora (después del movimiento)
+            if (piezaObjetivo != null)
+            {
+                JuegoUtilidades.CapturarPieza(piezaObjetivo);
+            }
 
             ActualizarTableroVisual();
             return true;

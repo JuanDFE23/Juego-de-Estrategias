@@ -23,6 +23,10 @@ namespace Juego_de_Estrategias
             string ganador = (colorPerdedor == Jugador.Blanco) ? "Negras" : "Blancas";
             MessageBox.Show($"¡Jaque Mate! El ganador es el jugador de las {ganador}");
 
+            // Registrar victoria
+            var ganadorEnum = (colorPerdedor == Jugador.Blanco) ? Jugador.Negro : Jugador.Blanco;
+            ScoreManager.AddWin(ganadorEnum);
+
             // Intentar encontrar una instancia abierta de FormJuego y reiniciarla
             foreach (Form frm in Application.OpenForms)
             {
